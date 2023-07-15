@@ -53,7 +53,7 @@ export default function TodoList(props) {
         <Grid
           as="li"
           key={todo.id}
-          onClick={() => onTodoClick(todo)}
+          // onClick={() => onTodoClick(todo)}
           {...overrides?.todo}
         >
           {todo.name}
