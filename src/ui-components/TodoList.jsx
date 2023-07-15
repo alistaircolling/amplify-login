@@ -12,34 +12,22 @@ import { set } from "lodash";
 // after your imports
 API.configure(config)
 
-async function list() {
-	console.log("list............");
-   const response = await API.graphql({
-      query: listTodos,
-      variables: {
-      // <your variables, optional>
-      },
-   })
-	  console.log("response.....");
-   console.log(response);
-}
-
-
+	const dataStoreQuery = async () => {
+		const todos = await DataStore.query(Todo);
+		return todos;
+	}
 
 export default function TodoList(props) {
   const { todos, onTodoClick, overrides, ...rest } = props;
   const [todoRecords, setTodoRecords] = React.useState(todos);
-	const dataStoreQuery = async () => {
-		const todos = await DataStore.query(Todo);
-		console.log("datastore todos...............");
-		console.log(todos);
-		setTodoRecords(todos);
-	}
   React.useEffect(() => {
-		// list();
-		const todos = dataStoreQuery()
+			const todos =  dataStoreQuery().then((todos) => {
+			console.log('todos returned from dataStoreQuery:', todos);
+			setTodoRecords(todos);
+		});
 
   }, []);
+
   return (
     <Grid
       as="ul"
