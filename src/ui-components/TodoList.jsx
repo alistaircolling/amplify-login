@@ -1,4 +1,6 @@
 //a component to list all Todos from aws amplify DataStore
+import React from "react";
+import { Todo } from "../models";
 import { DataStore } from "aws-amplify";
 import { Grid } from "@chakra-ui/react";
 
