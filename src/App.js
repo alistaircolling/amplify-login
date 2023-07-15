@@ -1,17 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
+import { Button, Heading, withAuthenticator } from '@aws-amplify/ui-react';
+// wrap the App with the withAuthenticator HOC
 
-function App() {
+/* src/App.js */
+function App({ signOut, user }) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-        Hiya!
-        </p>
-      </header>
+      <Heading level={1}>Hello {user.username}</Heading>
+      <Button onClick={signOut}>Sign out</Button>
     </div>
   );
 }
 
-export default App;
+export default withAuthenticator(App);
