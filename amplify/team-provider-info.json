@@ -17,6 +17,9 @@
       },
       "api": {
         "amplifylogin": {}
+      },
+      "storage": {
+        "s3amplifyloginstorage00af6a99": {}
       }
     }
   }

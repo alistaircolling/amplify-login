@@ -6,4 +6,4 @@
 
 export { default as studioTheme } from "./studioTheme";
 export { default as AddTodo } from "./AddTodo";
-export { default as TodoUpdateForm } from "./TodoUpdateForm";
+export { default as TodoUpdate } from "./TodoUpdate";

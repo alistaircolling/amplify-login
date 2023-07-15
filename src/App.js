@@ -2,7 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import { Button, Heading, withAuthenticator } from '@aws-amplify/ui-react';
 import {
- AddTodo 
+  AddTodo,
+  TodoUpdate
 } from './ui-components';
 
 /* src/App.js */
@@ -12,6 +13,10 @@ function App({ signOut, user }) {
     <div className="App">
       <Heading level={1}>Hello {user.attributes.email}</Heading>
       <Button onClick={signOut}>Sign out</Button>
+      <div>
+      <TodoUpdate />
+
+      </div>
       <div>
         <h2>Add Todo</h2>
         <AddTodo
