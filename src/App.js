@@ -5,6 +5,7 @@ import {
   AddTodo,
   TodoUpdate
 } from './ui-components';
+import TodoList from './ui-components/TodoList';
 
 /* src/App.js */
 function App({ signOut, user }) {
@@ -14,8 +15,12 @@ function App({ signOut, user }) {
       <Heading level={1}>Hello {user.attributes.email}</Heading>
       <Button onClick={signOut}>Sign out</Button>
       <div>
-      <TodoUpdate />
-
+        <h2>Todo List</h2>
+        <TodoList />
+      </div>
+      <div>
+        <h2>Update Todo</h2>
+        <TodoUpdate />
       </div>
       <div>
         <h2>Add Todo</h2>
