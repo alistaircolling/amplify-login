@@ -1,5 +1,5 @@
 projects:
-  amplifyMainApi:
+  amplifylogin:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js

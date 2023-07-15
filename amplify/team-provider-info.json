@@ -16,7 +16,7 @@
         "amplifylogin94a5ddd6": {}
       },
       "api": {
-        "amplifyMainApi": {}
+        "amplifylogin": {}
       }
     }
   }
