@@ -10,6 +10,8 @@ export default function TodoList(props) {
   React.useEffect(() => {
     const queryData = async () => {
       const records = await DataStore.query(Todo);
+			console.log('records');
+			console.log(records);
       setTodoRecords(records);
     };
     queryData();
@@ -23,7 +25,7 @@ export default function TodoList(props) {
       {...overrides}
       {...rest}
     >
-      {todoRecords.map((todo) => (
+      {/* {todoRecords.map((todo) => (
         <Grid
           as="li"
           key={todo.id}
@@ -32,7 +34,7 @@ export default function TodoList(props) {
         >
           {todo.name}
         </Grid>
-      ))}
+      ))} */}
     </Grid>
   );
 }
