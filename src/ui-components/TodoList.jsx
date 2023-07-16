@@ -1,82 +1,75 @@
-import { DataStore } from '@aws-amplify/datastore';
-import { Grid } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
-import React from "react";
-import { Todo } from '../models';
-import { useTodoContext } from '../context/TodoContext';
+import React, { useState, useEffect } from 'react';
+import { fetchTodos, updateTodo } from '../dataStore/index';
+import { find, random } from 'node-emoji';
 
-export default function TodoList({ userEmail }) {
-  const { todoRecords, updateTodoList } = useTodoContext();
+const appendEmoji = (input) => {
+  const words = input?.split(' ');
+  if (!words?.length) return
+  const appendedWords = words.map((word) => {
+    const relevantEmoji = find(word.toLowerCase());
+    return relevantEmoji ? `${word} ${relevantEmoji.emoji}` : `${word} ${random().emoji}`;
+  });
 
-  const updateTodo = async (todo) => {
-    try {
-      const original = await DataStore.query(Todo, todo.id);
+  return appendedWords.join(' ');
+};
 
-      await DataStore.save(
-        Todo.copyOf(original, updated => {
-          updated.completed = todo.completed;
-        })
-      );
-      fetchAndSetTodos(userEmail);
-    } catch (error) {
-      console.error('Error updating todo:', error);
-    }
+const TodoList = ({ todos, userEmail }) => {
+  const [todoList, setTodoList] = useState(todos);
+
+  useEffect(() => {
+    setTodoList(todos);
+  }, [todos]);
+
+  const handleUpdateTodo = (todo) => {
+    updateTodo(todo, userEmail).then(() => {
+      fetchTodos(userEmail).then((updatedTodos) => {
+        console.log(updatedTodos);
+        setTodoList(updatedTodos);
+      });
+    });
   };
 
-  const fetchTodos = async (userEmail) => {
-    // Request all todos from AWS Amplify DataStore where the userId matches the user's email
-    const todos = await DataStore.query(Todo, c => c.userId.eq(userEmail));
-    return todos;
-  };
-
-  const fetchAndSetTodos = async (userEmail) => {
-    try {
-      const todos = await fetchTodos(userEmail);
-      console.log('todos', todos);
-      updateTodoList(todos); // Update the todo list using the context
-    } catch (error) {
-      console.error('Error fetching todos:', error);
-    }
-  };
 
   return (
-    <Grid
-      as="ul"
-      rowGap="15px"
-      columnGap="15px"
-      padding="20px"
-    >
-      {todoRecords?.length > 0 && todoRecords.map((todo) => (
-        <Grid
-          as="li"
-          key={todo.id}
-        >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr auto',
-              alignItems: 'center',
-              gap: '30px',
-              width: '100%',
-            }}
-          >
-            <div>{todo.name}</div>
-            <div>{todo.description}</div>
-            <input type="checkbox" checked={todo.completed} onChange={() => updateTodo({ ...todo, completed: !todo.completed })} />
-          </div>
-        </Grid>
-      ))}
-    </Grid>
-
+    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <thead>
+        <tr>
+          <th style={{ border: '1px solid grey', padding: '8px' }}>Name</th>
+          <th style={{ border: '1px solid grey', padding: '8px' }}>Description</th>
+          <th style={{ border: '1px solid grey', padding: '8px' }}>Completed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {todoList?.map((todo) => (
+          <tr key={todo.id}>
+            <td style={{ border: '1px solid grey', padding: '8px' }}>{appendEmoji(todo.name)}</td>
+            <td style={{ border: '1px solid grey', padding: '8px' }}>{appendEmoji(todo.description)}</td>
+            <td style={{ border: '1px solid grey', padding: '8px' }}>
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => handleUpdateTodo({ ...todo, completed: !todo.completed })}
+              />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
-}
-
-TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    completed: PropTypes.bool.isRequired,
-  })),
-  userEmail: PropTypes.string,
 };
+
+// Add PropTypes here
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string,
+      description: PropTypes.string,
+      completed: PropTypes.bool.isRequired,
+    })
+  ),
+  userEmail: PropTypes.string.isRequired,
+};
+
+export default TodoList;

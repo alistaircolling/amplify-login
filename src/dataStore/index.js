@@ -30,3 +30,20 @@ export const deleteAllTodos = async (userEmail) => {
 	}
 };
 
+
+export const updateTodo = async (todo, userEmail) => {
+	try {
+		const original = await DataStore.query(Todo, todo.id);
+
+		await DataStore.save(
+			Todo.copyOf(original, updated => {
+				updated.completed = todo.completed;
+			})
+		);
+		fetchAndSetTodos(userEmail);
+	} catch (error) {
+		console.error('Error updating todo:', error);
+	}
+};
+
+

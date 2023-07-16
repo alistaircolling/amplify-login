@@ -1,0 +1,6 @@
+There are some functions in src/ui-components/TodoList.jsx that are duplicated in src/dataStore/index.js
+The duplicated functions are:
+updateTodo fetchTodos  fetchAndSetTodos
+Refactor this component src/ui-components/TodoList.jsx so that it uses the functions in src/dataStore/index.js 
+Remove the function declarations from the TodoList.jsx
+Do not change the markup of the TodoList component

@@ -49,7 +49,7 @@ function App({ signOut, user }) {
     <div className="App">
       <Heading level={1}>Hello {currentUser.attributes.email}</Heading>
       <Button onClick={signOut}>Sign out</Button>
-      <div>
+      <div style={{ paddingBottom: '20px' }}>
         <h2>Todo List</h2>
         <TodoList todos={todoRecords} userEmail={currentUser.attributes.email} />
       </div>
