@@ -1,4 +1,3 @@
-//a component to list all Todos from aws amplify DataStore
 import { DataStore } from '@aws-amplify/datastore';
 import { Grid } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
@@ -6,11 +5,7 @@ import React from "react";
 import { Todo } from '../models';
 import { useTodoContext } from '../context/TodoContext';
 
-// after your imports
-
-
-export default function TodoList({ todos }) {
-  // const [todoRecords, setTodoRecords] = React.useState(null);
+export default function TodoList({  userEmail }) {
   const { todoRecords, updateTodoList } = useTodoContext();
 
   const updateTodo = async (todo) => {
@@ -22,12 +17,27 @@ export default function TodoList({ todos }) {
           updated.completed = todo.completed;
         })
       );
-      updateTodoList(todos);
+      fetchAndSetTodos(userEmail);
     } catch (error) {
       console.error('Error updating todo:', error);
     }
   };
 
+  const fetchTodos = async (userEmail) => {
+    // Request all todos from AWS Amplify DataStore where the userId matches the user's email
+    const todos = await DataStore.query(Todo, c => c.userId.eq(userEmail));
+    return todos;
+  };
+
+  const fetchAndSetTodos = async (userEmail) => {
+    try {
+      const todos = await fetchTodos(userEmail);
+      console.log('todos', todos);
+      updateTodoList(todos); // Update the todo list using the context
+    } catch (error) {
+      console.error('Error fetching todos:', error);
+    }
+  };
 
   return (
     <Grid
@@ -40,7 +50,6 @@ export default function TodoList({ todos }) {
         <Grid
           as="li"
           key={todo.id}
-        // onClick={() => onTodoClick(todo)}
         >
           <div
             style={{
@@ -68,4 +77,5 @@ TodoList.propTypes = {
     description: PropTypes.string,
     completed: PropTypes.bool.isRequired,
   })),
+  userEmail: PropTypes.string,
 };

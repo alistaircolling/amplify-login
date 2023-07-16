@@ -10,7 +10,7 @@ import { useTodoContext } from './context/TodoContext';
 import { DataStore } from '@aws-amplify/datastore';
 import { Todo } from './models';
 
-const fetchTodos = async (userEmail) => {
+export const fetchTodos = async (userEmail) => {
   //request all todos from aws amplify DataStore where the userId matches the user's email
   const todos = await DataStore.query(Todo, c => c.userId.eq(userEmail));
   return todos;
@@ -65,7 +65,7 @@ function App({ signOut, user }) {
       <Button onClick={signOut}>Sign out</Button>
       <div>
         <h2>Todo List</h2>
-        <TodoList todos={todoRecords} />
+        <TodoList todos={todoRecords} userEmail={currentUser.attributes.email} />
       </div>
       <Button onClick={deleteAllTodos}>Delete All Todos</Button>
       {/* <div>
