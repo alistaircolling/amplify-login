@@ -1,17 +1,14 @@
+import { random, search } from 'node-emoji';
 import PropTypes from 'prop-types';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { fetchTodos, updateTodo } from '../dataStore/index';
-import { find, random } from 'node-emoji';
 
 const appendEmoji = (input) => {
   const words = input?.split(' ');
   if (!words?.length) return
-  const appendedWords = words.map((word) => {
-    const relevantEmoji = find(word.toLowerCase());
-    return relevantEmoji ? `${word} ${relevantEmoji.emoji}` : `${word} ${random().emoji}`;
-  });
-
-  return appendedWords.join(' ');
+  const word = words[0];
+  const relevantEmoji = search(word.toLowerCase())[0] || random();
+  return `${relevantEmoji.emoji} ${input}`
 };
 
 const TodoList = ({ todos, userEmail }) => {
