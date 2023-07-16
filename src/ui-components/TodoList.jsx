@@ -4,6 +4,7 @@ import { Grid } from "@chakra-ui/react";
 import PropTypes from 'prop-types';
 import React from "react";
 import { Todo } from '../models';
+import { useTodoContext } from '../context/TodoContext';
 
 // after your imports
 
@@ -14,7 +15,8 @@ const fetchTodos = async (userEmail) => {
 }
 
 export default function TodoList({ user }) {
-  const [todoRecords, setTodoRecords] = React.useState(null);
+  // const [todoRecords, setTodoRecords] = React.useState(null);
+  const { todoRecords, updateTodoList } = useTodoContext();
   const [userEmail, setUserEmail] = React.useState(null);
 
   // store the user's email in local state when the user prop changes
@@ -28,7 +30,7 @@ export default function TodoList({ user }) {
     try {
       const todos = await fetchTodos(userEmail);
       console.log('todos', todos);
-      setTodoRecords(todos);
+      updateTodoList(todos); // Update the todo list using the context
     } catch (error) {
       console.error('Error fetching todos:', error);
     }
