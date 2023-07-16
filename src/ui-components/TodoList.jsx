@@ -8,38 +8,10 @@ import { useTodoContext } from '../context/TodoContext';
 
 // after your imports
 
-const fetchTodos = async (userEmail) => {
-  //request all todos from aws amplify DataStore where the userId matches the user's email
-  const todos = await DataStore.query(Todo, c => c.userId.eq(userEmail));
-  return todos;
-}
 
-export default function TodoList({ user }) {
+export default function TodoList({ todos }) {
   // const [todoRecords, setTodoRecords] = React.useState(null);
   const { todoRecords, updateTodoList } = useTodoContext();
-  const [userEmail, setUserEmail] = React.useState(null);
-
-  // store the user's email in local state when the user prop changes
-  React.useEffect(() => {
-    if (user) {
-      setUserEmail(user.attributes.email);
-    }
-  }, [user]);
-
-  const fetchAndSetTodos = async () => {
-    try {
-      const todos = await fetchTodos(userEmail);
-      console.log('todos', todos);
-      updateTodoList(todos); // Update the todo list using the context
-    } catch (error) {
-      console.error('Error fetching todos:', error);
-    }
-  };
-
-  React.useEffect(() => {
-    if (!userEmail) return;
-    fetchAndSetTodos();
-  }, [userEmail]);
 
   const updateTodo = async (todo) => {
     try {
@@ -50,7 +22,7 @@ export default function TodoList({ user }) {
           updated.completed = todo.completed;
         })
       );
-      fetchAndSetTodos(userEmail);
+      updateTodoList(todos);
     } catch (error) {
       console.error('Error updating todo:', error);
     }
@@ -90,9 +62,10 @@ export default function TodoList({ user }) {
 }
 
 TodoList.propTypes = {
-  user: PropTypes.shape({
-    attributes: PropTypes.shape({
-      email: PropTypes.string,
-    }),
-  }),
+  todos: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    completed: PropTypes.bool.isRequired,
+  })),
 };
