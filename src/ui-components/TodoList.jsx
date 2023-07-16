@@ -5,7 +5,7 @@ import React from "react";
 import { Todo } from '../models';
 import { useTodoContext } from '../context/TodoContext';
 
-export default function TodoList({  userEmail }) {
+export default function TodoList({ userEmail }) {
   const { todoRecords, updateTodoList } = useTodoContext();
 
   const updateTodo = async (todo) => {
@@ -53,10 +53,10 @@ export default function TodoList({  userEmail }) {
         >
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'space-evenly', // 'space-between
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr auto',
+              alignItems: 'center',
               gap: '30px',
-              alignItems: 'left',
               width: '100%',
             }}
           >
@@ -67,6 +67,7 @@ export default function TodoList({  userEmail }) {
         </Grid>
       ))}
     </Grid>
+
   );
 }
 
