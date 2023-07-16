@@ -1,27 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
 import { Button, Heading, withAuthenticator } from '@aws-amplify/ui-react';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import './App.css';
 import {
-  AddTodo,
-  TodoUpdate
+  AddTodo
 } from './ui-components';
 import TodoList from './ui-components/TodoList';
 
-/* src/App.js */
 function App({ signOut, user }) {
   console.log(user);
+  // store the user in state
+  const [currentUser] = useState(user);
+
+  console.log("currentUser", currentUser);
+
   return (
     <div className="App">
-      <Heading level={1}>Hello {user.attributes.email}</Heading>
+      <Heading level={1}>Hello {currentUser.attributes.email}</Heading>
       <Button onClick={signOut}>Sign out</Button>
       <div>
         <h2>Todo List</h2>
-        <TodoList />
+        <TodoList user={currentUser} />
       </div>
-      <div>
+      {/* <div>
         <h2>Update Todo</h2>
         <TodoUpdate />
-      </div>
+      </div> */}
       <div>
         <h2>Add Todo</h2>
         <AddTodo
@@ -35,6 +39,7 @@ function App({ signOut, user }) {
                 updatedFields[key] = fields[key]
               }
             })
+            updatedFields['userId'] = currentUser.attributes.email
             return updatedFields
           }}
         />
@@ -42,5 +47,8 @@ function App({ signOut, user }) {
     </div>
   );
 }
-
+App.propTypes = {
+  signOut: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+};
 export default withAuthenticator(App);

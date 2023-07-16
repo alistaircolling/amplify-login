@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import App from './App';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
+// import the schema
 
 // configure Amplify
 
@@ -16,6 +17,9 @@ import "@aws-amplify/ui-react/styles.css";
 import { studioTheme } from "./ui-components";
 
 Amplify.configure(awsconfig);
+// DataStore.configure({
+//   models: schema.models,
+// });
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

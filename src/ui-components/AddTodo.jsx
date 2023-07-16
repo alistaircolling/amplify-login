@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Todo } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -25,20 +31,24 @@ export default function AddTodo(props) {
   const initialValues = {
     name: "",
     description: "",
+    completed: false,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
+  const [completed, setCompleted] = React.useState(initialValues.completed);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
     setDescription(initialValues.description);
+    setCompleted(initialValues.completed);
     setErrors({});
   };
   const validations = {
     name: [{ type: "Required" }],
     description: [],
+    completed: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -68,6 +78,7 @@ export default function AddTodo(props) {
         let modelFields = {
           name,
           description,
+          completed,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -124,6 +135,7 @@ export default function AddTodo(props) {
             const modelFields = {
               name: value,
               description,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -149,6 +161,7 @@ export default function AddTodo(props) {
             const modelFields = {
               name,
               description: value,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -163,6 +176,32 @@ export default function AddTodo(props) {
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
       ></TextField>
+      <SwitchField
+        label="Completed"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={completed}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              completed: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.completed ?? value;
+          }
+          if (errors.completed?.hasError) {
+            runValidationTasks("completed", value);
+          }
+          setCompleted(value);
+        }}
+        onBlur={() => runValidationTasks("completed", completed)}
+        errorMessage={errors.completed?.errorMessage}
+        hasError={errors.completed?.hasError}
+        {...getOverrideProps(overrides, "completed")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

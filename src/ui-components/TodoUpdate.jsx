@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Todo } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -26,11 +32,15 @@ export default function TodoUpdate(props) {
   const initialValues = {
     name: "",
     description: "",
+    userId: "",
+    completed: false,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
+  const [userId, setUserId] = React.useState(initialValues.userId);
+  const [completed, setCompleted] = React.useState(initialValues.completed);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = todoRecord
@@ -38,6 +48,8 @@ export default function TodoUpdate(props) {
       : initialValues;
     setName(cleanValues.name);
     setDescription(cleanValues.description);
+    setUserId(cleanValues.userId);
+    setCompleted(cleanValues.completed);
     setErrors({});
   };
   const [todoRecord, setTodoRecord] = React.useState(todoModelProp);
@@ -54,6 +66,8 @@ export default function TodoUpdate(props) {
   const validations = {
     name: [{ type: "Required" }],
     description: [],
+    userId: [],
+    completed: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -83,6 +97,8 @@ export default function TodoUpdate(props) {
         let modelFields = {
           name,
           description,
+          userId,
+          completed,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -140,6 +156,8 @@ export default function TodoUpdate(props) {
             const modelFields = {
               name: value,
               description,
+              userId,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -165,6 +183,8 @@ export default function TodoUpdate(props) {
             const modelFields = {
               name,
               description: value,
+              userId,
+              completed,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -179,6 +199,60 @@ export default function TodoUpdate(props) {
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
       ></TextField>
+      <TextField
+        label="User id"
+        isRequired={false}
+        isReadOnly={false}
+        value={userId}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              userId: value,
+              completed,
+            };
+            const result = onChange(modelFields);
+            value = result?.userId ?? value;
+          }
+          if (errors.userId?.hasError) {
+            runValidationTasks("userId", value);
+          }
+          setUserId(value);
+        }}
+        onBlur={() => runValidationTasks("userId", userId)}
+        errorMessage={errors.userId?.errorMessage}
+        hasError={errors.userId?.hasError}
+        {...getOverrideProps(overrides, "userId")}
+      ></TextField>
+      <SwitchField
+        label="Completed"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={completed}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              userId,
+              completed: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.completed ?? value;
+          }
+          if (errors.completed?.hasError) {
+            runValidationTasks("completed", value);
+          }
+          setCompleted(value);
+        }}
+        onBlur={() => runValidationTasks("completed", completed)}
+        errorMessage={errors.completed?.errorMessage}
+        hasError={errors.completed?.hasError}
+        {...getOverrideProps(overrides, "completed")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Todo } from "../models";
 export declare type ValidationResponse = {
@@ -16,16 +16,22 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type TodoUpdateInputValues = {
     name?: string;
     description?: string;
+    userId?: string;
+    completed?: boolean;
 };
 export declare type TodoUpdateValidationValues = {
     name?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
+    userId?: ValidationFunction<string>;
+    completed?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type TodoUpdateOverridesProps = {
     TodoUpdateGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
+    userId?: PrimitiveOverrideProps<TextFieldProps>;
+    completed?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type TodoUpdateProps = React.PropsWithChildren<{
     overrides?: TodoUpdateOverridesProps | undefined | null;

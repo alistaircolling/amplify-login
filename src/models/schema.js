@@ -24,6 +24,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "userId": {
+                    "name": "userId",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "completed": {
+                    "name": "completed",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -70,5 +84,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "4401034582a70c60713e1f7f9da3b752"
+    "version": "38cee9890b78d612ce51ed654a7607c6"
 };

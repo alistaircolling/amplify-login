@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
@@ -15,16 +15,19 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type AddTodoInputValues = {
     name?: string;
     description?: string;
+    completed?: boolean;
 };
 export declare type AddTodoValidationValues = {
     name?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
+    completed?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type AddTodoOverridesProps = {
     AddTodoGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
     description?: PrimitiveOverrideProps<TextFieldProps>;
+    completed?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type AddTodoProps = React.PropsWithChildren<{
     overrides?: AddTodoOverridesProps | undefined | null;
