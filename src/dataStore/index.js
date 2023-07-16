@@ -22,9 +22,11 @@ export const fetchTodos = async (userEmail) => {
 export const deleteAllTodos = async (userEmail) => {
 	console.log("deleting all todos");
 	try {
-		await DataStore.delete(Todo, c => c.userId.eq(userEmail));
-		// fetchAndSetTodos();
+		const todos = await DataStore.query(Todo, c => c.userId.eq(userEmail));
+		await Promise.all(todos.map(todo => DataStore.delete(Todo, todo.id)));
+		await fetchAndSetTodos();
 	} catch (error) {
 		console.error('Error deleting todos:', error);
 	}
 };
+

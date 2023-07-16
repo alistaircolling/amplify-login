@@ -53,16 +53,19 @@ function App({ signOut, user }) {
         <h2>Todo List</h2>
         <TodoList todos={todoRecords} userEmail={currentUser.attributes.email} />
       </div>
-      <Button onClick={deleteAllTodos}>Delete All Todos</Button>
-      {/* <div>
-        <h2>Update Todo</h2>
-        <TodoUpdate />
-      </div> */}
+      <Button onClick={() => {
+        deleteAllTodos(currentUser.attributes.email)
+        updateTodoList([])
+      }
+      }>Delete All Todos</Button>
       <div>
         <h2>Add Todo</h2>
         <AddTodo
           onSuccess={() => {
-            fetchAndSetTodos()
+            fetchAndSetTodos(currentUser.attributes.email).then((result) => {
+              updateTodoList(result);
+            }
+            );
           }}
           onSubmit={(fields) => {
             // Example function to trim all string inputs

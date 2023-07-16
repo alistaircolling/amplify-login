@@ -46,7 +46,7 @@ export default function TodoList({ userEmail }) {
       columnGap="15px"
       padding="20px"
     >
-      {todoRecords?.length && todoRecords.map((todo) => (
+      {todoRecords?.length > 0 && todoRecords.map((todo) => (
         <Grid
           as="li"
           key={todo.id}
